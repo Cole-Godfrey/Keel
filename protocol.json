@@ -1,0 +1,30 @@
+{
+  "base_costs_bps": {
+    "fee": 60,
+    "slippage": 10
+  },
+  "development_commit": "b06c295885b8c766bf5feec1b988e1c08a7210c9",
+  "development_end_exclusive": "2024-01-01",
+  "files_sha256": {
+    "data/btc_usd_bitstamp_daily.csv": "f3ee2056ec870ab104c9c54fc23b238c86775a0749916231139c14c5751ef21f",
+    "data/btc_usd_bitstamp_daily.json": "fa0a71dfb8ce8d701362efa12b670bb828387dfa6dc73424a2a4e22f55532d89",
+    "src/quantlab/chart.py": "37de74cd3346bfbeaf755ffea8cd006cf16198cf2674d9aea9d9d16e4ba9e3de",
+    "src/quantlab/data.py": "db45d4751fa26d24ef4f8c3b6d2f33c68e6cc7cdd94c6bcab1735fedc2a3752e",
+    "src/quantlab/engine.py": "4076bfa98aaee4960202ce5a8b1a6b0dba74630ac738e307a744b49560a465d3",
+    "src/quantlab/metrics.py": "52c4697fd4c6955c4bb70370bf7b433abbc55ea6cb6c83d4fe2b54be59813b75",
+    "src/quantlab/paper.py": "159bfcb9e4ecc6331fadc7d4805bf9efc6f9eb36df8fff9c9198fe4aec5c085a",
+    "src/quantlab/report.py": "987e088b9db4366514e7f7fc0371485f085c270e0a734d187e387d8c99341432",
+    "src/quantlab/study.py": "d3210d4478894ffcfcdb03fcef494ab14024446557245274cbea78c0902e305c"
+  },
+  "sealed_at_utc": "2026-09-28T19:19:32.940827+00:00",
+  "strategy": {
+    "fast": 50,
+    "initial_cash": 10000,
+    "slow": 200
+  },
+  "stress_costs_bps": {
+    "fee": 100,
+    "slippage": 30
+  },
+  "warmup_days": 250
+}
