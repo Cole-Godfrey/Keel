@@ -1,0 +1,12 @@
+{
+  "end_exclusive": "2026-05-21",
+  "granularity_seconds": 86400,
+  "product": "Bitstamp BTC/USD",
+  "reversed_volume_columns": 911,
+  "rows": 3915,
+  "sha256": "f3ee2056ec870ab104c9c54fc23b238c86775a0749916231139c14c5751ef21f",
+  "source": "https://www.cryptodatadownload.com/cdd/Bitstamp_BTCUSD_d.csv",
+  "source_license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+  "source_sha256": "fec65c1877ae434f1ab44f13343c63434a5e25d2195cf9c8e2925271bd1f997b",
+  "start_inclusive": "2015-09-01"
+}

@@ -1,0 +1,17 @@
+AGENTS.md
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.DS_Store
+.env
+.env.*
+*.pem
+*.key
+id_rsa
+id_ed25519
+paper/state.json
+paper/events.jsonl
+paper/lock
+paper/runner.log
+paper/runner.err
