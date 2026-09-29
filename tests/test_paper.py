@@ -14,7 +14,7 @@ from keel.paper import _history, _ticker, record_once, reconcile, status
 
 
 class PaperTests(unittest.TestCase):
-    def test_thirty_day_streak_survives_a_later_gap(self) -> None:
+    def test_thirty_dated_entries_do_not_prove_unattended_validation(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
             path = Path(directory) / "events.jsonl"
             first = datetime(2026, 9, 29, 0, 15, tzinfo=timezone.utc)
@@ -29,15 +29,17 @@ class PaperTests(unittest.TestCase):
             with patch("keel.paper.verify_seal"), patch("keel.paper._history", side_effect=history), patch("keel.paper._ticker", side_effect=ticker):
                 for index in range(30):
                     record_once(first + timedelta(days=index), path)
-                completed = status(path)
-                self.assertTrue(completed["complete"])
-                self.assertEqual(completed["consecutive_days"], 30)
-                self.assertEqual(completed["completed_window"], {"start": "2026-09-29", "end": "2026-10-28"})
+                ledger = status(path)
+                self.assertFalse(ledger["complete"])
+                self.assertFalse(ledger["unattended_verified"])
+                self.assertEqual(ledger["consecutive_days"], 30)
+                self.assertEqual(ledger["ledger_window"], {"start": "2026-09-29", "end": "2026-10-28"})
                 record_once(first + timedelta(days=31), path)
             after_gap = status(path)
-            self.assertTrue(after_gap["complete"])
+            self.assertFalse(after_gap["complete"])
             self.assertEqual(after_gap["consecutive_days"], 1)
             self.assertEqual(after_gap["longest_consecutive_days"], 30)
+            self.assertEqual(after_gap["ledger_window"], ledger["ledger_window"])
 
     def test_replay_detects_changed_overlapping_history(self) -> None:
         with tempfile.TemporaryDirectory() as directory:

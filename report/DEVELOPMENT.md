@@ -1,5 +1,7 @@
 # Keel: BTC/USD daily moving-average study
 
+**License:** [Original code: MIT](../LICENSE). [Bundled data and data-derived reports: CC BY-NC-SA 4.0](../DATA_LICENSE.md), which restricts commercial use. Commercial use of the data requires a separate license from CryptoDataDownload.
+
 ## Data and reproduction
 
 Run `./run.sh` from a clone with Python 3.10+ and Git. It runs the standard-library tests and rebuilds this report, the CSV equity curves, and the SVG charts offline.

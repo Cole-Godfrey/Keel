@@ -101,19 +101,21 @@ def status(path: Path = EVENTS_PATH) -> dict:
             longest = streak
             longest_end = day
         previous_day = day
-    completed_window = None
+    ledger_window = None
     if longest >= 30 and longest_end is not None:
-        completed_window = {
+        ledger_window = {
             "start": (longest_end - timedelta(days=longest - 1)).isoformat(),
             "end": longest_end.isoformat(),
         }
+    # dated entries and replay cannot establish that the scheduled runner was unattended.
     return {
         "entries": len(events),
         "consecutive_days": streak,
         "longest_consecutive_days": longest,
         "last_day": events[-1]["day"] if events else None,
-        "completed_window": completed_window,
-        "complete": longest >= 30,
+        "ledger_window": ledger_window,
+        "unattended_verified": False,
+        "complete": False,
         "discrepancies": 0,
     }
 

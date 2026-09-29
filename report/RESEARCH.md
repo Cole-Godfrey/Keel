@@ -1,5 +1,7 @@
 # Keel: BTC/USD daily moving-average study
 
+**License:** [Original code: MIT](../LICENSE). [Bundled data and data-derived reports: CC BY-NC-SA 4.0](../DATA_LICENSE.md), which restricts commercial use. Commercial use of the data requires a separate license from CryptoDataDownload.
+
 ## Data and reproduction
 
 Run `./run.sh` from a clone with Python 3.10+ and Git. It runs the standard-library tests and rebuilds this report, the CSV equity curves, and the SVG charts offline.
@@ -69,4 +71,4 @@ Daily bars cannot capture intraday order depth, outages, or actual fills. The ba
 
 ## Protocol and operational validation
 
-The original research code and data were sealed at 2026-09-28T19:19:32.940827+00:00 from development commit `b06c295885b8c766bf5feec1b988e1c08a7210c9`. The report checks that seal and the Keel rename manifest before running the holdout. The data, strategy, accounting, metrics, and chart code retain their original sealed hashes. Among sealed files, the rename changed report presentation and the paper feed's User-Agent. The paper trial needs 30 consecutive daily ledger entries and a clean reconciliation before it is complete.
+The original research code and data were sealed at 2026-09-28T19:19:32.940827+00:00 from development commit `b06c295885b8c766bf5feec1b988e1c08a7210c9`. The report checks that seal and the Keel rename manifest before running the holdout. The data, strategy, accounting, metrics, and chart code retain their original sealed hashes. Among sealed files, the rename manifest records later changes to report presentation and paper feed/status code. Ledger continuity and replay do not establish unattended runs. The paper trial requires 30 consecutive unattended days and a clean reconciliation.

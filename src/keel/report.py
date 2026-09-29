@@ -73,6 +73,10 @@ def _shared_intro(metadata: dict) -> list[str]:
     return [
         "# Keel: BTC/USD daily moving-average study",
         "",
+        "**License:** [Original code: MIT](../LICENSE). [Bundled data and data-derived reports: "
+        "CC BY-NC-SA 4.0](../DATA_LICENSE.md), which restricts commercial use. "
+        "Commercial use of the data requires a separate license from CryptoDataDownload.",
+        "",
         "## Data and reproduction",
         "",
         "Run `./run.sh` from a clone with Python 3.10+ and Git. It runs the standard-library "
@@ -152,11 +156,11 @@ def generate(*, development_only: bool = False) -> Path:
         )
     lines.append("")
 
-    # keep the development report separate from holdout verification and calculation.
+    # keep the standalone development report in sync without opening the holdout.
+    development_path = REPORT_DIR / "DEVELOPMENT.md"
+    development_path.write_text("\n".join(lines).rstrip() + "\n")
     if development_only:
-        output = REPORT_DIR / "DEVELOPMENT.md"
-        output.write_text("\n".join(lines).rstrip() + "\n")
-        return output
+        return development_path
 
     # check the original seal and rename hashes before opening the holdout.
     protocol = verify_seal()
@@ -187,8 +191,9 @@ def generate(*, development_only: bool = False) -> Path:
             f"from development commit `{protocol['development_commit']}`. The report checks that "
             "seal and the Keel rename manifest before running the holdout. The data, strategy, "
             "accounting, metrics, and chart code retain their original sealed hashes. Among sealed "
-            "files, the rename changed report presentation and the paper feed's User-Agent. The paper trial needs 30 "
-            "consecutive daily ledger entries and a clean reconciliation before it is complete.",
+            "files, the rename manifest records later changes to report presentation and paper "
+            "feed/status code. Ledger continuity and replay do not establish unattended runs. "
+            "The paper trial requires 30 consecutive unattended days and a clean reconciliation.",
             "",
         ]
     )

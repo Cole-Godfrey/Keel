@@ -9,4 +9,4 @@
 - [x] 7. Development and held-out Bitstamp windows, separated before the sealed evaluation; prior cross-venue BTC knowledge is disclosed.
 - [x] 8. Development sensitivity across nearby parameters and higher costs.
 - [x] 9. Reproducible rules, assumptions, results, failures, and equity curves in the report.
-- [ ] 10. Thirty consecutive unattended paper-trading days with zero reconciliation discrepancies.
+- [ ] 10. Thirty consecutive unattended paper-trading days with zero reconciliation discrepancies. The local ledger had one dated entry on 2026-09-29 UTC; ledger continuity and replay do not verify unattended runs.
