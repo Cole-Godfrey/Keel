@@ -3,14 +3,14 @@ requires = ["setuptools>=61"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "quantlab"
+name = "keel"
 version = "0.1.0"
 description = "Reproducible, cash-funded BTC-USD trend-following research"
 requires-python = ">=3.10"
 dependencies = []
 
 [project.scripts]
-quantlab = "quantlab.__main__:main"
+keel = "keel.__main__:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]

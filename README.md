@@ -1,17 +1,17 @@
-# Quant Lab
+# Keel
 
-Reproduce a noncommercial BTC/USD moving-average study from a pinned Bitstamp daily OHLCV snapshot:
+Keel reproduces a noncommercial BTC/USD moving-average study using a pinned daily Bitstamp dataset:
 
 ```sh
 ./run.sh
 ```
 
-Requires Python 3.10+ and Git. The command uses only the Python standard library, makes no network request, runs the tests, verifies the sealed data and research code, and regenerates [the report](report/RESEARCH.md) with CSV equity curves and SVG charts.
+You need Python 3.10+ and Git. The command runs the tests, checks the research seal, and rebuilds [the report](report/RESEARCH.md), CSV equity curves, and SVG charts. It uses the Python standard library and makes no network request.
 
-The dataset contains 3,915 consecutive UTC days from 2015-09-01 through 2026-05-20. [CryptoDataDownload](https://www.cryptodatadownload.com/data/bitstamp/) offers it under [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/); see [data attribution and changes](DATA_LICENSE.md). Acquisition and normalization are in `src/quantlab/fetch.py`. The supplied snapshot is pinned by SHA-256, so a clean clone needs no data download.
+The dataset covers 3,915 consecutive UTC days, from 2015-09-01 through 2026-05-20. [CryptoDataDownload](https://www.cryptodatadownload.com/data/bitstamp/) licenses it under [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/). The data is included in the repository and pinned by SHA-256. The importer is in `src/keel/fetch.py`; [data attribution](DATA_LICENSE.md) describes the changes to the source file.
 
-The strategy and buy-and-hold benchmark share one cash-funded execution engine with fees, slippage, and next-open fills. The report covers rules, assumptions, sensitivity, held-out results, and failure cases. A prior private Coinbase study examined the same BTC period; this is disclosed in [the audit note](report/AUDIT.md).
+The strategy and buy-and-hold benchmark use the same cash-funded execution engine, including fees, slippage, and next-open fills. The report records the rules, assumptions, sensitivity runs, held-out results, and failure cases. [The audit note](report/AUDIT.md) discloses an earlier private Coinbase study of the same BTC period.
 
-Paper trading reads public Bitstamp candles and quotes, writes an append-only local ledger, and never sends an order. On macOS, `python3 paper/install.py` schedules it every five minutes; it acts only from 00:10 to 00:59 UTC. Check progress with `PYTHONPATH=src python3 -m quantlab paper-status`. The computer must remain awake, logged in, and online during that window. The 30-consecutive-day requirement is pending until the ledger proves it.
+Paper trading reads public Bitstamp candles and quotes, records them in an append-only local ledger, and sends no orders. On macOS, `python3 paper/install.py` schedules the runner every five minutes. It records one entry per day between 00:10 and 00:59 UTC. Check the ledger with `PYTHONPATH=src python3 -m keel paper-status`. The computer must be awake, logged in, and online during that window. The 30-day trial is still in progress.
 
 See [requirement status](STATUS.md).

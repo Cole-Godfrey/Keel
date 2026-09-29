@@ -6,4 +6,4 @@ utc_minute=$(date -u +%M)
 [ "$utc_minute" -ge 10 ] || exit 0
 cd "$(dirname "$0")/.."
 export PYTHONPATH=src
-"${PYTHON_BIN:-python3}" -m quantlab paper
+"${PYTHON_BIN:-python3}" -m keel paper

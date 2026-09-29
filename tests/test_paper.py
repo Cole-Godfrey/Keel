@@ -10,7 +10,7 @@ from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from unittest.mock import patch
 
-from quantlab.paper import _history, _ticker, record_once, reconcile, status
+from keel.paper import _history, _ticker, record_once, reconcile, status
 
 
 class PaperTests(unittest.TestCase):
@@ -26,7 +26,7 @@ class PaperTests(unittest.TestCase):
             def ticker(now):
                 return {"time": now.isoformat(), "price": "1200", "bid": "1199", "ask": "1201"}
 
-            with patch("quantlab.paper.verify_seal"), patch("quantlab.paper._history", side_effect=history), patch("quantlab.paper._ticker", side_effect=ticker):
+            with patch("keel.paper.verify_seal"), patch("keel.paper._history", side_effect=history), patch("keel.paper._ticker", side_effect=ticker):
                 for index in range(30):
                     record_once(first + timedelta(days=index), path)
                 completed = status(path)
@@ -44,7 +44,7 @@ class PaperTests(unittest.TestCase):
             path = Path(directory) / "events.jsonl"
             first = datetime(2026, 9, 29, 0, 15, tzinfo=timezone.utc)
             ticker = {"time": first.isoformat(), "price": "100", "bid": "99", "ask": "101"}
-            with patch("quantlab.paper.verify_seal"), patch("quantlab.paper._history", side_effect=[[90.0] * 200, [91.0] * 200]), patch("quantlab.paper._ticker", return_value=ticker):
+            with patch("keel.paper.verify_seal"), patch("keel.paper._history", side_effect=[[90.0] * 200, [91.0] * 200]), patch("keel.paper._ticker", return_value=ticker):
                 record_once(first, path)
                 with self.assertRaisesRegex(ValueError, "history changed"):
                     record_once(first + timedelta(days=1), path)
@@ -58,7 +58,7 @@ class PaperTests(unittest.TestCase):
             "bid": "99",
             "ask": "101",
         }
-        with patch("quantlab.paper.urllib.request.urlopen", return_value=io.BytesIO(json.dumps(payload).encode())):
+        with patch("keel.paper.urllib.request.urlopen", return_value=io.BytesIO(json.dumps(payload).encode())):
             self.assertEqual(_ticker(now), {"time": "2026-09-29T00:15:09+00:00", "price": "100", "bid": "99", "ask": "101"})
 
     def test_bitstamp_history_requires_250_completed_days(self) -> None:
@@ -69,10 +69,10 @@ class PaperTests(unittest.TestCase):
             for index in range(250)
         ]
         payload = {"data": {"pair": "BTC/USD", "ohlc": rows}}
-        with patch("quantlab.paper.urllib.request.urlopen", return_value=io.BytesIO(json.dumps(payload).encode())):
+        with patch("keel.paper.urllib.request.urlopen", return_value=io.BytesIO(json.dumps(payload).encode())):
             self.assertEqual(_history(day), [float(150 + index) for index in range(200)])
         payload["data"]["ohlc"].pop(50)
-        with patch("quantlab.paper.urllib.request.urlopen", return_value=io.BytesIO(json.dumps(payload).encode())):
+        with patch("keel.paper.urllib.request.urlopen", return_value=io.BytesIO(json.dumps(payload).encode())):
             with self.assertRaisesRegex(ValueError, "gap"):
                 _history(day)
 
@@ -82,7 +82,7 @@ class PaperTests(unittest.TestCase):
             now = datetime(2026, 9, 29, 0, 15, tzinfo=timezone.utc)
             ticker = {"time": now.isoformat(), "price": "100", "bid": "99", "ask": "101"}
             closes = [90.0] * 150 + [100.0] * 50
-            with patch("quantlab.paper.verify_seal"), patch("quantlab.paper._history", return_value=closes), patch("quantlab.paper._ticker", return_value=ticker):
+            with patch("keel.paper.verify_seal"), patch("keel.paper._history", return_value=closes), patch("keel.paper._ticker", return_value=ticker):
                 first = record_once(now, path)
                 second = record_once(now, path)
             self.assertEqual(first, second)
@@ -96,7 +96,7 @@ class PaperTests(unittest.TestCase):
             now = datetime(2026, 9, 29, 0, 15, tzinfo=timezone.utc)
             ticker = {"time": now.isoformat(), "price": "100", "bid": "99", "ask": "101"}
             closes = [90.0] * 150 + [100.0] * 50
-            with patch("quantlab.paper.verify_seal"), patch("quantlab.paper._history", return_value=closes), patch("quantlab.paper._ticker", return_value=ticker):
+            with patch("keel.paper.verify_seal"), patch("keel.paper._history", return_value=closes), patch("keel.paper._ticker", return_value=ticker):
                 record_once(now, path)
             event = json.loads(path.read_text())
             event["fill"]["fee"] = 0

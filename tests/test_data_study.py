@@ -6,8 +6,8 @@ import unittest
 from dataclasses import replace
 from datetime import date
 
-from quantlab.data import load_bars
-from quantlab.study import BASE_COSTS, compare, windows
+from keel.data import load_bars
+from keel.study import BASE_COSTS, compare, windows
 
 
 class DataAndSplitTests(unittest.TestCase):

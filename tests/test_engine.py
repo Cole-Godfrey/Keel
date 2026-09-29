@@ -6,9 +6,9 @@ import math
 import unittest
 from datetime import date, timedelta
 
-from quantlab.data import Bar
-from quantlab.engine import Costs, Portfolio, execute_target, moving_average_target, run_backtest
-from quantlab.metrics import DAYS_PER_YEAR, calculate
+from keel.data import Bar
+from keel.engine import Costs, Portfolio, execute_target, moving_average_target, run_backtest
+from keel.metrics import DAYS_PER_YEAR, calculate
 
 
 def bars_from_prices(opens: list[float], closes: list[float]) -> list[Bar]:

@@ -1,18 +1,22 @@
-# BTC-USD daily moving-average research
+# Keel: BTC/USD daily moving-average study
 
-## Reproduction and source
+## Data and reproduction
 
-Run `./run.sh` from a clone with Python 3.10+ and Git. It runs the standard-library test suite and regenerates this report, its CSV equity curves, and SVG charts without a network request.
+Run `./run.sh` from a clone with Python 3.10+ and Git. It runs the standard-library tests and rebuilds this report, the CSV equity curves, and the SVG charts offline.
 
-The pinned dataset contains 3915 consecutive UTC daily BTC-USD OHLCV bars from 2015-09-01 through the day before 2026-05-21. SHA-256: `f3ee2056ec870ab104c9c54fc23b238c86775a0749916231139c14c5751ef21f`. Source: [CryptoDataDownload's Bitstamp BTC/USD daily file](https://www.cryptodatadownload.com/data/bitstamp/), licensed [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/). The source's BTC and USD volume headings are reversed in 911 older rows; we chose the smaller field as BTC volume only after verifying the implied USD/BTC price against each day's OHLC range. The source later contains a partial 2026-05-21 bar and no 2026-05-22 bar, so this pinned study ends on 2026-05-20. The loader rejects gaps, duplicates, invalid prices, and checksum changes. `python3 -m quantlab.fetch` documents the acquisition code; the checked-in snapshot is the reproducible input. See `DATA_LICENSE.md` for attribution.
+The snapshot has 3,915 consecutive UTC daily BTC/USD OHLCV bars from 2015-09-01 through 2026-05-20. Its SHA-256 is `f3ee2056ec870ab104c9c54fc23b238c86775a0749916231139c14c5751ef21f`. It comes from [CryptoDataDownload's Bitstamp daily file](https://www.cryptodatadownload.com/data/bitstamp/), licensed under [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/).
+
+In 911 older rows, the source reverses its BTC and USD volume headings. The importer checked each row's implied price against its OHLC range before choosing BTC volume. The source also has a partial 2026-05-21 bar and no 2026-05-22 bar. The loader rejects gaps, duplicates, invalid prices, and checksum changes. `python3 -m keel.fetch` contains the acquisition code; the included snapshot is the reproducible input. See `DATA_LICENSE.md` for attribution.
 
 ## Rules and assumptions
 
-Start with $10,000 cash, no leverage, no shorting, and no interest. After each completed UTC daily bar, compare its trailing 50- and 200-day closing-price averages. Hold BTC only when the faster average is strictly above the slower one. Fill a changed target at the *next* bar's open. All available cash buys BTC rounded down to 0.00000001 BTC; a flat signal sells all BTC. The benchmark buys at the first evaluation open and holds. Both portfolios pay the same assumed costs.
+Both portfolios start with $10,000 cash, with no leverage, shorting, or interest. After each completed UTC daily bar, the strategy compares the trailing 50- and 200-day closing-price averages. It holds BTC when the faster average is strictly above the slower one. A changed target fills at the *next* bar's open. A buy uses all available cash and rounds BTC down to 0.00000001; a flat signal sells the whole position. The benchmark buys at the first evaluation open and holds. Both pay the same assumed costs.
 
-Base costs per side: 60 basis points fee plus 10 basis points adverse slippage. Stress costs: 100 and 30 basis points. These are research assumptions, not a current Bitstamp fee quote. Equity is marked at the daily close; the last position is not liquidated. Daily simple returns include open-to-close P&L on entry days. CAGR uses 365.2425 days per year; volatility is sample standard deviation times its square root; Sharpe uses a zero risk-free rate; maximum drawdown includes starting equity. Turnover is the sum of executed notional divided by the preceding close's equity. Trades count completed buy or sell executions.
+Base costs per side are 60 basis points in fees and 10 basis points of adverse slippage. The stress run uses 100 and 30 basis points. These are research assumptions, not a current Bitstamp fee quote. Equity is marked at each daily close, and the final position is left open. Entry-day simple returns include the move from the open to the close.
 
-The first 250 bars are indicator history only. Development ends before 2024-01-01; the independent out-of-sample portfolio starts with fresh cash on that date while its signal may use earlier completed development closes.
+CAGR uses 365.2425 days per year. Volatility is the sample standard deviation of daily returns times the square root of 365.2425. Sharpe assumes a zero risk-free rate. Maximum drawdown includes starting equity. Turnover sums executed notional divided by the preceding close's equity. Each completed buy or sell counts as a trade.
+
+The first 250 bars supply indicator history. Development ends before 2024-01-01. The out-of-sample portfolio starts with fresh cash on that date, although its signal can use completed closes from the development period.
 
 ## Development (2016-05-08 to 2023-12-31)
 
@@ -23,11 +27,11 @@ The first 250 bars are indicator history only. Development ends before 2024-01-0
 
 ![Development equity curve](equity_development.svg)
 
-The strategy's deepest close-to-close drawdown was -72.07% from 2017-12-16 to 2020-03-12. Its CAGR difference versus buy and hold was -5.45 percentage points.
+From 2017-12-16 to 2020-03-12, the strategy's close-to-close drawdown reached -72.07%. Its CAGR was 5.45 percentage points lower than buy and hold.
 
 ## Development sensitivity
 
-Each row uses the identical development dates and starts with fresh cash. Only the sealed 50/200 base-cost setting is evaluated out of sample.
+Each run uses the same development dates and starts with fresh cash. Only the sealed 50/200 setting with base costs went into the holdout.
 
 | Fast / slow | Fee / slippage (bps) | CAGR | Sharpe | Max drawdown | Turnover | Trades |
 |---|---:|---:|---:|---:|---:|---:|
@@ -55,14 +59,14 @@ Each row uses the identical development dates and starts with fresh cash. Only t
 
 ![Out of sample equity curve](equity_oos.svg)
 
-The strategy's deepest close-to-close drawdown was -38.49% from 2024-12-17 to 2025-11-17. Its CAGR difference versus buy and hold was -16.24 percentage points.
+From 2024-12-17 to 2025-11-17, the strategy's close-to-close drawdown reached -38.49%. Its CAGR was 16.24 percentage points lower than buy and hold.
 
 ## Failure cases and limits
 
-The development strategy's base-cost CAGR changes from 75.00% to 73.23% under the higher cost assumption. Nearby average lengths in the table show how sensitive the result is to timing choices. The drawdown dates above identify observed loss episodes.
+With higher assumed costs, the development strategy's CAGR fell from 75.00% to 73.23%. The nearby moving-average lengths in the table give different results.
 
-Daily bars cannot represent intraday order depth, outages, or real fills. The open is a modeled execution price; paper trading uses a later live ticker observation with the same signal, position-sizing, and accounting functions. A single BTC-USD venue does not test other markets or future regimes. Taxes, custody risk, spread beyond the assumed slippage, and funding costs are excluded. No live capital was used. The same BTC period was previously evaluated on Coinbase in a private study, so this venue's holdout is not fully blind across markets.
+Daily bars cannot capture intraday order depth, outages, or actual fills. The backtest models execution at the open; paper trading uses a later live quote with the same signal, position-sizing, and accounting functions. One BTC/USD venue says little about other markets or future conditions. The model excludes taxes, custody risk, funding costs, and any spread beyond the assumed slippage. No live capital was used. A previous private Coinbase study covered some of the same BTC dates, so the Bitstamp holdout was not fully blind across venues.
 
 ## Protocol and operational validation
 
-Research code and data were sealed at 2026-09-28T19:19:32.940827+00:00 from development commit `b06c295885b8c766bf5feec1b988e1c08a7210c9`. The report command verifies the sealed SHA-256 manifest before computing out-of-sample results. Paper trading must accumulate 30 consecutive daily ledger entries, reconcile without differences, and complete its calendar window before the operational requirement can be marked complete.
+The original research code and data were sealed at 2026-09-28T19:19:32.940827+00:00 from development commit `b06c295885b8c766bf5feec1b988e1c08a7210c9`. The report checks that seal and the Keel rename manifest before running the holdout. The data, strategy, accounting, metrics, and chart code retain their original sealed hashes. Among sealed files, the rename changed report wording and the paper feed's User-Agent. The paper trial needs 30 consecutive daily ledger entries and a clean reconciliation before it is complete.

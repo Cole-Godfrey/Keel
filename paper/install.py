@@ -10,7 +10,7 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[1]
-LABEL = "com.quantlab.paper"
+LABEL = "com.keel.paper"
 
 
 def main() -> None:

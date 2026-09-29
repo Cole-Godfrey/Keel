@@ -12,16 +12,17 @@ from .study import BASE_COSTS, DEV_END, FAST, SLOW, STRESS_COSTS, WARMUP_DAYS
 
 
 PROTOCOL_PATH = ROOT / "protocol.json"
+RENAME_PATH = ROOT / "rename.json"
 TRACKED = (
     "data/btc_usd_bitstamp_daily.csv",
     "data/btc_usd_bitstamp_daily.json",
-    "src/quantlab/data.py",
-    "src/quantlab/engine.py",
-    "src/quantlab/metrics.py",
-    "src/quantlab/study.py",
-    "src/quantlab/chart.py",
-    "src/quantlab/report.py",
-    "src/quantlab/paper.py",
+    "src/keel/data.py",
+    "src/keel/engine.py",
+    "src/keel/metrics.py",
+    "src/keel/study.py",
+    "src/keel/chart.py",
+    "src/keel/report.py",
+    "src/keel/paper.py",
 )
 
 
@@ -50,6 +51,20 @@ def seal() -> None:
 
 def verify_seal() -> dict:
     protocol = json.loads(PROTOCOL_PATH.read_text())
-    if protocol["files_sha256"] != _manifest():
+    expected = protocol["files_sha256"]
+    if set(expected) != set(TRACKED):
+        # preserve the original seal while mapping its source paths to the renamed package.
+        rename = json.loads(RENAME_PATH.read_text())
+        if sha256_file(PROTOCOL_PATH) != rename["original_protocol_sha256"]:
+            raise ValueError("the original protocol changed")
+        expected = {
+            name.replace("src/quantlab/", "src/keel/"): digest
+            for name, digest in expected.items()
+        }
+        changed = rename["changed_files_sha256"]
+        if set(expected) != set(TRACKED) or set(changed) != {"src/keel/report.py", "src/keel/paper.py"}:
+            raise ValueError("the rename manifest has unexpected files")
+        expected.update(changed)
+    if expected != _manifest():
         raise ValueError("a sealed data or research source file changed")
     return protocol

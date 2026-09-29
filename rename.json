@@ -1,0 +1,8 @@
+{
+  "changed_files_sha256": {
+    "src/keel/paper.py": "0f8da4ebd24281cfb2761e98448d98b61d6791a288540bec2a1fe2fd18de7a8c",
+    "src/keel/report.py": "47c92d081577673267fca8f6075b80fda68aae4dd07bb6b4d18d9107cf730b77"
+  },
+  "original_protocol_sha256": "e3a3951a4f1536bb2e07ccd57ff8b3e5cc5e11d06dd41057d2120dc5d24705ae",
+  "recorded_at_utc": "2026-09-29T04:48:25.567143+00:00"
+}

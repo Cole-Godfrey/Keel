@@ -91,7 +91,7 @@ def main() -> None:
     parser.add_argument("--meta", type=Path, default=META_PATH)
     args = parser.parse_args()
     if args.source_file is None:
-        request = urllib.request.Request(SOURCE_URL, headers={"User-Agent": "quantlab-research/0.1"})
+        request = urllib.request.Request(SOURCE_URL, headers={"User-Agent": "keel-research/0.1"})
         with urllib.request.urlopen(request, timeout=60) as response:
             raw = response.read()
         with tempfile.NamedTemporaryFile() as handle:

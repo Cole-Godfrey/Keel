@@ -120,7 +120,7 @@ def status(path: Path = EVENTS_PATH) -> dict:
 
 def _history(day: date) -> list[float]:
     start = day - timedelta(days=250)
-    request = urllib.request.Request(OHLC_URL, headers={"User-Agent": "quantlab-paper/0.1"})
+    request = urllib.request.Request(OHLC_URL, headers={"User-Agent": "keel-paper/0.1"})
     with urllib.request.urlopen(request, timeout=30) as response:
         payload = json.load(response)
     if payload["data"]["pair"] != "BTC/USD":
@@ -136,7 +136,7 @@ def _history(day: date) -> list[float]:
 
 
 def _ticker(now: datetime) -> dict:
-    request = urllib.request.Request(TICKER_URL, headers={"User-Agent": "quantlab-paper/0.1"})
+    request = urllib.request.Request(TICKER_URL, headers={"User-Agent": "keel-paper/0.1"})
     with urllib.request.urlopen(request, timeout=30) as response:
         payload = json.load(response)
     tick_time = datetime.fromtimestamp(int(payload["timestamp"]), tz=timezone.utc)
