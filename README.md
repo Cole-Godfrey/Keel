@@ -12,6 +12,6 @@ The dataset covers 3,915 consecutive UTC days, from 2015-09-01 through 2026-05-2
 
 The strategy and buy-and-hold benchmark use the same cash-funded execution engine, including fees, slippage, and next-open fills. The report records the rules, assumptions, sensitivity runs, held-out results, and failure cases. [The audit note](report/AUDIT.md) discloses an earlier private Coinbase study of the same BTC period.
 
-Paper trading reads public Bitstamp candles and quotes, records them in an append-only local ledger, and sends no orders. On macOS, `python3 paper/install.py` schedules the runner every five minutes. It records one entry per day between 00:10 and 00:59 UTC. Check the ledger with `PYTHONPATH=src python3 -m keel paper-status`. The computer must be awake, logged in, and online during that window. The 30-day trial is still in progress.
+Paper trading reads public Bitstamp candles and quotes, records them in an append-only local ledger, and sends no orders. On macOS, `python3 paper/install.py` schedules the runner every five minutes. The runner acts only between 00:10 and 00:59 UTC. Check the ledger with `PYTHONPATH=src python3 -m keel paper-status`. The computer must be awake, logged in, and online during that window. The 30-day trial is still in progress.
 
 See [requirement status](STATUS.md).
