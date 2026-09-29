@@ -46,6 +46,7 @@ def _window_section(name: str, comparison, image_name: str) -> str:
     last = comparison.strategy.observations[-1].day
     peak = strategy.drawdown_peak.isoformat() if strategy.drawdown_peak else "inception"
     trough = strategy.drawdown_trough.isoformat() if strategy.drawdown_trough else "none"
+    # describe the gap correctly even if a later study beats the benchmark.
     cagr_gap = (strategy.cagr - benchmark.cagr) * 100
     gap_description = f"{abs(cagr_gap):.2f} percentage points {'higher' if cagr_gap >= 0 else 'lower'}"
     return "\n".join(
@@ -67,6 +68,7 @@ def _window_section(name: str, comparison, image_name: str) -> str:
 
 
 def _shared_intro(metadata: dict) -> list[str]:
+    # show the last included bar; the metadata stores an exclusive end date.
     last_day = (date.fromisoformat(metadata["end_exclusive"]) - timedelta(days=1)).isoformat()
     return [
         "# Keel: BTC/USD daily moving-average study",
@@ -150,11 +152,13 @@ def generate(*, development_only: bool = False) -> Path:
         )
     lines.append("")
 
+    # keep the development report separate from holdout verification and calculation.
     if development_only:
         output = REPORT_DIR / "DEVELOPMENT.md"
         output.write_text("\n".join(lines).rstrip() + "\n")
         return output
 
+    # check the original seal and rename hashes before opening the holdout.
     protocol = verify_seal()
     oos = compare(bars, *held_out)
     write_equity_chart(REPORT_DIR / "equity_oos.svg", oos.strategy, oos.benchmark, "Out-of-sample equity")
@@ -183,7 +187,7 @@ def generate(*, development_only: bool = False) -> Path:
             f"from development commit `{protocol['development_commit']}`. The report checks that "
             "seal and the Keel rename manifest before running the holdout. The data, strategy, "
             "accounting, metrics, and chart code retain their original sealed hashes. Among sealed "
-            "files, the rename changed report wording and the paper feed's User-Agent. The paper trial needs 30 "
+            "files, the rename changed report presentation and the paper feed's User-Agent. The paper trial needs 30 "
             "consecutive daily ledger entries and a clean reconciliation before it is complete.",
             "",
         ]

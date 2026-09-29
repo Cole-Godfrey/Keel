@@ -69,4 +69,4 @@ Daily bars cannot capture intraday order depth, outages, or actual fills. The ba
 
 ## Protocol and operational validation
 
-The original research code and data were sealed at 2026-09-28T19:19:32.940827+00:00 from development commit `b06c295885b8c766bf5feec1b988e1c08a7210c9`. The report checks that seal and the Keel rename manifest before running the holdout. The data, strategy, accounting, metrics, and chart code retain their original sealed hashes. Among sealed files, the rename changed report wording and the paper feed's User-Agent. The paper trial needs 30 consecutive daily ledger entries and a clean reconciliation before it is complete.
+The original research code and data were sealed at 2026-09-28T19:19:32.940827+00:00 from development commit `b06c295885b8c766bf5feec1b988e1c08a7210c9`. The report checks that seal and the Keel rename manifest before running the holdout. The data, strategy, accounting, metrics, and chart code retain their original sealed hashes. Among sealed files, the rename changed report presentation and the paper feed's User-Agent. The paper trial needs 30 consecutive daily ledger entries and a clean reconciliation before it is complete.

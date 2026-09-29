@@ -29,6 +29,7 @@ def main() -> None:
     }
     destination.write_bytes(plistlib.dumps(settings))
     domain = f"gui/{os.getuid()}"
+    # replace an existing Keel job before installing the current schedule.
     subprocess.run(["launchctl", "bootout", domain, str(destination)], check=False, capture_output=True)
     subprocess.run(["launchctl", "bootstrap", domain, str(destination)], check=True)
     subprocess.run(["launchctl", "print", f"{domain}/{LABEL}"], check=True)

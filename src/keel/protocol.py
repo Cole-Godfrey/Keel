@@ -61,6 +61,7 @@ def verify_seal() -> dict:
             name.replace("src/quantlab/", "src/keel/"): digest
             for name, digest in expected.items()
         }
+        # only report presentation and paper feed identification may differ from the seal.
         changed = rename["changed_files_sha256"]
         if set(expected) != set(TRACKED) or set(changed) != {"src/keel/report.py", "src/keel/paper.py"}:
             raise ValueError("the rename manifest has unexpected files")
